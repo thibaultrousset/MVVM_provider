@@ -5,15 +5,14 @@ class SplashView extends StatefulWidget {
   const SplashView({Key? key}) : super(key: key);
 
   @override
-  _SplashViewState createState() => _SplashViewState();
+  SplashViewState createState() => SplashViewState();
 }
 
-class _SplashViewState extends State<SplashView> {
+class SplashViewState extends State<SplashView> {
   SplashServices splashServices = SplashServices();
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
 
     splashServices.checkAuthentication(context);
@@ -25,7 +24,7 @@ class _SplashViewState extends State<SplashView> {
       body: Center(
         child: Text(
           'Splash screen',
-          style: Theme.of(context).textTheme.headline4,
+          style: Theme.of(context).textTheme.headlineMedium,
         ),
       ),
     );

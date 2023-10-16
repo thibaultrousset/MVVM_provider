@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:test_tech_digital_paca/network/network_api_service.dart';
+import 'package:test_tech_digital_paca/res/color.dart';
 import 'package:test_tech_digital_paca/res/components/round_button.dart';
 import 'package:test_tech_digital_paca/utils/utils.dart';
 import 'package:test_tech_digital_paca/view_model/auth_view_model.dart';
@@ -23,7 +25,6 @@ class _LoginViewState extends State<LoginView> {
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _emailController.text = "test-tech-dp-api_front@gmail.com";
     _passwordController.text = "#j3apZAYBAm@Q4T2C!dQa";
@@ -48,85 +49,153 @@ class _LoginViewState extends State<LoginView> {
 
     final height = MediaQuery.of(context).size.height * 1;
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Login'),
-        centerTitle: true,
-      ),
-      body: SafeArea(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            TextFormField(
-              controller: _emailController,
-              keyboardType: TextInputType.emailAddress,
-              focusNode: emailFocusNode,
-              decoration: const InputDecoration(
-                  hintText: 'Email',
-                  labelText: 'Email',
-                  prefixIcon: Icon(Icons.alternate_email)),
-              onFieldSubmitted: (valu) {
-                Utils.fieldFocusChange(
-                    context, emailFocusNode, passwordFocusNode);
-              },
-            ),
-            ValueListenableBuilder(
-                valueListenable: _obsecurePassword,
-                builder: (context, value, child) {
-                  return TextFormField(
-                    controller: _passwordController,
-                    obscureText: _obsecurePassword.value,
-                    focusNode: passwordFocusNode,
-                    obscuringCharacter: "*",
-                    decoration: InputDecoration(
-                      hintText: 'Password',
-                      labelText: 'Password',
-                      prefixIcon: const Icon(Icons.lock_open_rounded),
-                      suffixIcon: InkWell(
-                          onTap: () {
-                            _obsecurePassword.value = !_obsecurePassword.value;
-                          },
-                          child: Icon(_obsecurePassword.value
-                              ? Icons.visibility_off_outlined
-                              : Icons.visibility)),
-                    ),
-                  );
-                }),
-            SizedBox(
-              height: height * .085,
-            ),
-            RoundButton(
-              title: 'Login',
-              loading: authViewMode.loading,
-              onPress: () {
-                if (_emailController.text.isEmpty) {
-                  Utils.snackBar('Please enter email', context);
-                } else if (_passwordController.text.isEmpty) {
-                  Utils.snackBar('Please enter password', context);
-                } else if (_passwordController.text.length < 6) {
-                  Utils.snackBar('Please enter 6 digit password', context);
-                } else {
-                  Map data = {
-                    'email': _emailController.text.toString(),
-                    'password': _passwordController.text.toString(),
-                  };
+      backgroundColor: AppColors.lightBlue,
+      body: SafeArea(child: LayoutBuilder(
+          builder: (BuildContext context, BoxConstraints viewportConstraints) {
+        return SingleChildScrollView(
+            physics: const ClampingScrollPhysics(),
+            child: ConstrainedBox(
+              constraints: BoxConstraints(
+                  minHeight: viewportConstraints.maxHeight,
+                  minWidth: MediaQuery.of(context).size.width),
+              child: SizedBox(
+                height: MediaQuery.of(context).size.height - 84,
+                child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Container(
+                        padding: const EdgeInsets.all(30),
+                        decoration: const BoxDecoration(
+                            color: Colors.white, shape: BoxShape.circle),
+                        child: const Image(
+                          image: AssetImage(
+                              'images/DigitalPACA-Logo_Round_poulpe-en-haut.png'),
+                          height: 120,
+                        ),
+                      ),
+                      Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          SizedBox(
+                              width: MediaQuery.of(context).size.width / 3 * 2,
+                              child: const Text(
+                                "Se connecter :",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                    fontSize: 25,
+                                    color: Colors.white,
+                                    fontWeight: FontWeight.bold),
+                              )),
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          SizedBox(
+                            width: MediaQuery.of(context).size.width / 3 * 2,
+                            child: TextFormField(
+                              textAlign: TextAlign.center,
+                              controller: _emailController,
+                              keyboardType: TextInputType.emailAddress,
+                              focusNode: emailFocusNode,
+                              decoration: InputDecoration(
+                                contentPadding: const EdgeInsets.all(10),
+                                border: OutlineInputBorder(
+                                  borderRadius: BorderRadius.circular(8),
+                                  borderSide: const BorderSide(
+                                    width: 0,
+                                    style: BorderStyle.none,
+                                  ),
+                                ),
+                                fillColor: Colors.white,
+                                filled: true,
+                                hintText: 'Adresse mail',
+                              ),
+                              onFieldSubmitted: (valu) {
+                                Utils.fieldFocusChange(
+                                    context, emailFocusNode, passwordFocusNode);
+                              },
+                            ),
+                          ),
+                          const SizedBox(
+                            height: 15,
+                          ),
+                          ValueListenableBuilder(
+                              valueListenable: _obsecurePassword,
+                              builder: (context, value, child) {
+                                return SizedBox(
+                                  width:
+                                      MediaQuery.of(context).size.width / 3 * 2,
+                                  child: TextFormField(
+                                    textAlign: TextAlign.center,
+                                    controller: _passwordController,
+                                    obscureText: _obsecurePassword.value,
+                                    focusNode: passwordFocusNode,
+                                    obscuringCharacter: "*",
+                                    decoration: InputDecoration(
+                                      contentPadding: const EdgeInsets.all(10),
+                                      border: OutlineInputBorder(
+                                        borderRadius: BorderRadius.circular(8),
+                                        borderSide: const BorderSide(
+                                          width: 0,
+                                          style: BorderStyle.none,
+                                        ),
+                                      ),
+                                      hintText: 'Mot de passe',
+                                      fillColor: Colors.white,
+                                      filled: true,
+                                      suffixIcon: InkWell(
+                                          onTap: () {
+                                            _obsecurePassword.value =
+                                                !_obsecurePassword.value;
+                                          },
+                                          child: Icon(_obsecurePassword.value
+                                              ? Icons.visibility_off_outlined
+                                              : Icons.visibility)),
+                                    ),
+                                  ),
+                                );
+                              }),
+                          SizedBox(
+                            height: 15,
+                          ),
+                          RoundButton(
+                            title: 'Login',
+                            loading:
+                                authViewMode.loadingStatus == Status.loading,
+                            onPress: () {
+                              if (_emailController.text.isEmpty) {
+                                Utils.snackBar('Please enter email',
+                                    Colors.orange, context);
+                              } else if (_passwordController.text.isEmpty) {
+                                Utils.snackBar('Please enter password',
+                                    Colors.orange, context);
+                              } else if (_passwordController.text.length < 6) {
+                                Utils.snackBar('Please enter 6 digit password',
+                                    Colors.orange, context);
+                              } else {
+                                Map data = {
+                                  'email': _emailController.text.toString(),
+                                  'password':
+                                      _passwordController.text.toString(),
+                                };
 
-                  // Map data = {
-                  //   'email' : 'eve.holt@reqres.in',
-                  //   'password' : 'cityslicka',
-                  // };
-
-                  authViewMode.loginApi(data, context);
-                  print('api hit');
-                }
-              },
-            ),
-            SizedBox(
-              height: height * .02,
-            ),
-          ],
-        ),
-      ),
+                                authViewMode.loginApi(data, context);
+                              }
+                            },
+                          ),
+                          SizedBox(
+                            height: height * .02,
+                          ),
+                        ],
+                      ),
+                    ]),
+              ),
+            ));
+      })),
     );
   }
 }

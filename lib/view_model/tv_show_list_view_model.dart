@@ -10,7 +10,6 @@ import 'package:test_tech_digital_paca/view_model/tv_show_view_model.dart';
 
 class TVShowListViewModel extends ChangeNotifier {
   final _myRepo = TVShowhRepository();
-  final _authRepo = AuthRepository();
 
   List<TVShowViewModel> tvShowsVM = <TVShowViewModel>[];
 

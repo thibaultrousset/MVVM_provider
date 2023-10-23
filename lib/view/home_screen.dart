@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:test_tech_digital_paca/network/network_api_service.dart';
-import 'package:test_tech_digital_paca/res/color.dart';
-import 'package:test_tech_digital_paca/utils/routes/routes_name.dart';
+import 'package:test_tech_digital_paca/view/drawer_custom.dart';
 import 'package:test_tech_digital_paca/view/tv_show_details.dart';
 import 'package:test_tech_digital_paca/view_model/tv_show_list_view_model.dart';
 import 'package:test_tech_digital_paca/view_model/tv_show_view_model.dart';
-import 'package:test_tech_digital_paca/view_model/user_view_model.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -20,6 +18,7 @@ class HomeScreenState extends State<HomeScreen> {
 
   @override
   void initState() {
+    tvShowListViewModel.populateTVShowList(context);
     super.initState();
   }
 
@@ -30,61 +29,8 @@ class HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final userPrefernece = Provider.of<UserViewModel>(context);
     return Scaffold(
-      drawer: Drawer(
-        backgroundColor: AppColors.lightBlue,
-        child: ListView(padding: EdgeInsets.zero, children: [
-          DrawerHeader(
-            decoration: const BoxDecoration(
-              color: AppColors.lightBlue,
-            ),
-            child: Row(children: [
-              const CircleAvatar(
-                backgroundColor: Colors.white,
-                radius: 30,
-                child: Image(
-                  image: AssetImage(
-                      'images/DigitalPACA-Logo_Round_poulpe-en-haut.png'),
-                  height: 40,
-                ),
-              ),
-              const SizedBox(
-                width: 10,
-              ),
-              const Text(
-                'Menu',
-                style: TextStyle(
-                    fontSize: 30,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white),
-              ),
-              const Spacer(),
-              IconButton(
-                icon: const Icon(Icons.close),
-                color: Colors.white,
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-              )
-            ]),
-          ),
-          ListTile(
-            title: const Text('Home'),
-            onTap: () {
-              Navigator.pop(context);
-            },
-          ),
-          ListTile(
-            title: const Text('Deconnexion'),
-            onTap: () {
-              userPrefernece.remove().then((value) {
-                Navigator.popAndPushNamed(context, RoutesName.login);
-              });
-            },
-          )
-        ]),
-      ),
+      drawer: const CustomDrawer(),
       appBar: AppBar(
         elevation: 0,
         leading: Builder(
@@ -116,7 +62,6 @@ class HomeScreenState extends State<HomeScreen> {
                   itemCount: value.tvShowsVM.length,
                   itemBuilder: (context, index) {
                     final tvShow = value.tvShowsVM[index];
-
                     return GestureDetector(
                       onTap: () {
                         onSelected(context, tvShow);

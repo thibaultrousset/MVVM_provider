@@ -166,7 +166,7 @@ class _LoginViewState extends State<LoginView> {
                             title: 'Login',
                             loading:
                                 authViewMode.loadingStatus == Status.loading,
-                            onPress: () {
+                            onPressed: () {
                               if (_emailController.text.isEmpty) {
                                 Utils.snackBar('Please enter email',
                                     Colors.orange, context);

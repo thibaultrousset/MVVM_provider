@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:test_tech_digital_paca/model/tv_show_model.dart';
 
 class TVShowViewModel {
@@ -43,5 +45,10 @@ class TVShowViewModel {
 
   String get bannerUrl {
     return _tvShow.bannerUrl ?? "";
+  }
+
+  @override
+  String toString() {
+    return '$id $title $year $director $duration $rate $type $description $thumbUrl $bannerUrl';
   }
 }
